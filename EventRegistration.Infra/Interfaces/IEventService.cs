@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using EventRegistrationApp.Domain;
+﻿using EventRegistration.Domain;
 
-namespace EventRegistration.Infrastructure.Interfaces
+namespace EventRegistration.Infra.Interfaces
 {
     public interface IEventService
     {

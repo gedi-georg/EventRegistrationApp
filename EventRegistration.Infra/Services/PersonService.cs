@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using EventRegistration.Infrastructure.Interfaces;
-using EventRegistrationApp.Domain;
+﻿using EventRegistration.Domain;
+using EventRegistration.Infra.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace EventRegistration.Infrastructure.Services
+namespace EventRegistration.Infra.Services
 {
     public class PersonService : IPersonService
     {

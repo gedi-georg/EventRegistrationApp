@@ -1,15 +1,15 @@
 using EventRegistration.Infra;
-using EventRegistration.Infrastructure.Interfaces;
+using EventRegistration.Infra.Interfaces;
+using EventRegistration.Infra.Services;
 using EventRegistration.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
-
+// Register the ApplicationDbContext for Entity Framework
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register services for dependency injection
 builder.Services.AddScoped<IEventService, EventService>();
@@ -18,10 +18,10 @@ builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 
 
-// Register the ApplicationDbContext for Entity Framework
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Add services to the container.
+builder.Services.AddControllersWithViews();
 
+var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
