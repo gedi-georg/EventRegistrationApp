@@ -1,14 +1,14 @@
-﻿using EventRegistration.Domain;
+﻿using EventRegistration.Domain.Models;
 using EventRegistration.Infra.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace EventRegistration.Infra.Services
+namespace EventRegistration.Infra.Repos
 {
-    public class EventService : IEventService
+    public class EventRepo : IEventService
     {
         private readonly ApplicationDbContext _context;
 
-        public EventService(ApplicationDbContext context)
+        public EventRepo(ApplicationDbContext context)
         {
             _context = context;
         }

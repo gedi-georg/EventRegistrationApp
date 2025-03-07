@@ -1,14 +1,14 @@
-﻿using EventRegistration.Domain;
+﻿using EventRegistration.Domain.Models;
 using EventRegistration.Infra.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace EventRegistration.Infra.Services
+namespace EventRegistration.Infra.Repos
 {
-    public class PersonService : IPersonService
+    public class PersonRepo : IPersonService
     {
         private readonly ApplicationDbContext _context;
 
-        public PersonService(ApplicationDbContext context)
+        public PersonRepo(ApplicationDbContext context)
         {
             _context = context;
         }

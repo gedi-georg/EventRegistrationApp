@@ -1,14 +1,14 @@
-﻿using EventRegistration.Domain;
+﻿using EventRegistration.Domain.Models;
 using EventRegistration.Infra.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace EventRegistration.Infra.Services
+namespace EventRegistration.Infra.Repos
 {
-    public class CompanyService : ICompanyService
+    public class CompanyRepo : ICompanyService
     {
         private readonly ApplicationDbContext _context;
 
-        public CompanyService(ApplicationDbContext context)
+        public CompanyRepo(ApplicationDbContext context)
         {
             _context = context;
         }

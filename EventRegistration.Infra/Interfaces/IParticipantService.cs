@@ -1,4 +1,4 @@
-﻿using EventRegistration.Domain;
+﻿using EventRegistration.Domain.Models;
 
 namespace EventRegistration.Infra.Interfaces
 {

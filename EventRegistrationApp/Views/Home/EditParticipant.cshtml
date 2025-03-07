@@ -1,0 +1,31 @@
+﻿@model EventRegistration.Domain.Models.Participant
+
+<div class="container mt-4">
+    <h2>Muuda osavõtja andmeid</h2>
+
+    <form method="post">
+        <div class="mb-3">
+            <label for="Name" class="form-label">Nimi</label>
+            <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="ParticipantType" class="form-label">Osavõtja tüüp</label>
+            <select class="form-control" id="ParticipantType" name="ParticipantType" required>
+                <option value="Person" @if (Model.PersonId != null) { <text>selected</text> }>Füüsiline isik</option>
+                <option value="Company" @if (Model.CompanyId != null) { <text>selected</text> }>Ettevõte</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="PaymentMethod" class="form-label">Makseviis</label>
+            <select class="form-control" id="PaymentMethod" name="PaymentMethod">
+                <option value="BankTransfer" @if (Model.PaymentMethod == "BankTransfer") { <text>selected</text> }>Pangaülekanne</option>
+                <option value="Cash" @if (Model.PaymentMethod == "Cash") { <text>selected</text> }>Sularaha</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Salvesta</button>
+        <a href="@Url.Action("ManageParticipants", "Event", new { id = Model.EventId })" class="btn btn-secondary">Tagasi</a>
+    </form>
+</div>

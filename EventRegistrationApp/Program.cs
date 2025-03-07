@@ -1,7 +1,6 @@
 using EventRegistration.Infra;
 using EventRegistration.Infra.Interfaces;
-using EventRegistration.Infra.Services;
-using EventRegistration.Infrastructure.Services;
+using EventRegistration.Infra.Repos;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,10 +11,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register services for dependency injection
-builder.Services.AddScoped<IEventService, EventService>();
-builder.Services.AddScoped<IParticipantService, ParticipantService>();
-builder.Services.AddScoped<IPersonService, PersonService>();
-builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<IEventService, EventRepo>();
+builder.Services.AddScoped<IParticipantService, ParticipantRepo>();
+builder.Services.AddScoped<IPersonService, PersonRepo>();
+builder.Services.AddScoped<ICompanyService, CompanyRepo>();
 
 
 // Add services to the container.

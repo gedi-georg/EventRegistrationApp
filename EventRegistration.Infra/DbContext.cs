@@ -1,4 +1,4 @@
-﻿using EventRegistration.Domain;
+﻿using EventRegistration.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventRegistration.Infra

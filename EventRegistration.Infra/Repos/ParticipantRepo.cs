@@ -1,18 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EventRegistration.Domain;
-using EventRegistration.Infra;
+﻿using EventRegistration.Domain.Models;
 using EventRegistration.Infra.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace EventRegistration.Infrastructure.Services
+namespace EventRegistration.Infra.Repos
 {
-    public class ParticipantService : IParticipantService
+    public class ParticipantRepo : IParticipantService
     {
         private readonly ApplicationDbContext _context;
 
-        public ParticipantService(ApplicationDbContext context)
+        public ParticipantRepo(ApplicationDbContext context)
         {
             _context = context;
         }

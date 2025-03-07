@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventRegistration.Domain
+namespace EventRegistration.Domain.Models
 {
     public class Participant : Entity
     {
@@ -13,7 +13,7 @@ namespace EventRegistration.Domain
         public int? CompanyId { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public string AdditionalInfo { get; set; }
-        
+
         public Event Event { get; set; }
         public Person Person { get; set; }
         public Company Company { get; set; }

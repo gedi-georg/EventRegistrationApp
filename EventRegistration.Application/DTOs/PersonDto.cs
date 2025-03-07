@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventRegistration.Domain
+namespace EventRegistration.Application.DTOs
 {
-    public class Person : Entity
+    public class PersonDto
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PersonalIdCode { get; set; }
-        
-        public ICollection<Participant> Participants { get; set; }
     }
 }

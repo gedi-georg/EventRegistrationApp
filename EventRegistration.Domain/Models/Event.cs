@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventRegistration.Domain
+namespace EventRegistration.Domain.Models
 {
     public class Event : Entity
     {

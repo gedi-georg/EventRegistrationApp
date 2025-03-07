@@ -1,0 +1,30 @@
+﻿@model EventRegistration.Domain.Models.Event
+
+<div class="container mt-4">
+    <h2>Lisa uus üritus</h2>
+
+    <form method="post">
+        <div class="mb-3">
+            <label for="Name" class="form-label">Ürituse nimi</label>
+            <input type="text" class="form-control" id="Name" name="Name" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="EventDate" class="form-label">Toimumisaeg</label>
+            <input type="datetime-local" class="form-control" id="EventDate" name="EventDate" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="Location" class="form-label">Toimumiskoht</label>
+            <input type="text" class="form-control" id="Location" name="Location" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="AdditionalInfo" class="form-label">Lisainfo</label>
+            <textarea class="form-control" id="AdditionalInfo" name="AdditionalInfo" maxlength="1000"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success">Lisa üritus</button>
+        <a href="@Url.Action("Index", "Event")" class="btn btn-secondary">Tagasi</a>
+    </form>
+</div>
