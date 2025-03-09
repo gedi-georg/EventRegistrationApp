@@ -1,71 +1,63 @@
-using EventRegistration.Domain.Models;
-using EventRegistration.Infra.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+//using EventRegistration.Domain.Models;
+//using EventRegistration.Infra.Interfaces;
+//using Microsoft.AspNetCore.Mvc;
 
-namespace EventRegistration.UI.Controllers
-{
-    public class ParticipantController : Controller
-    {
-        private readonly IParticipantService _participantService;
-        private readonly IEventService _eventService;
+//public class ParticipantController : Controller
+//{
+//    private readonly IParticipantService _participantService;
 
-        public ParticipantController(IParticipantService participantService, IEventService eventService)
-        {
-            _participantService = participantService;
-            _eventService = eventService;
-        }
+//    public ParticipantController(IParticipantService participantService)
+//    {
+//        _participantService = participantService;
+//    }
 
-        // Osavõtja lisamine
-        public IActionResult Create(int eventId)
-        {
-            ViewData["EventId"] = eventId;
-            return View();
-        }
+//    public IActionResult Create(int eventId)
+//    {
+//        ViewData["EventId"] = eventId;
+//        return View(new Participant { EventId = eventId });
+//    }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(Participant newParticipant)
-        {
-            if (ModelState.IsValid)
-            {
-                await _participantService.AddAsync(newParticipant);
-                return RedirectToAction("ManageParticipants", "Event", new { id = newParticipant.EventId });
-            }
-            return View(newParticipant);
-        }
+//    [HttpPost]
+//    public IActionResult Create(Participant participant)
+//    {
+//        if (ModelState.IsValid)
+//        {
+//            _participantService.AddAsync(participant);
+//            return RedirectToAction("ManageParticipants", "Event", new { id = participant.EventId });
+//        }
+//        ViewData["EventId"] = participant.EventId;
+//        return View(participant);
+//    }
 
-        // Osavõtja detailide vaatamine/muutmine
-        public async Task<IActionResult> Edit(int id)
-        {
-            var participant = await _participantService.GetByIdAsync(id);
-            if (participant == null)
-            {
-                return NotFound();
-            }
-            return View(participant);
-        }
+//    public IActionResult Edit(int id)
+//    {
+//        var participant = _participantService.GetByIdAsync(id);
+//        if (participant == null)
+//        {
+//            return NotFound();
+//        }
+//        return View(participant.Result);
+//    }
 
-        [HttpPost]
-        public async Task<IActionResult> Edit(Participant updatedParticipant)
-        {
-            if (ModelState.IsValid)
-            {
-                await _participantService.UpdateAsync(updatedParticipant);
-                return RedirectToAction("ManageParticipants", "Event", new { id = updatedParticipant.EventId });
-            }
-            return View(updatedParticipant);
-        }
+//    [HttpPost]
+//    public IActionResult Edit(Participant participant)
+//    {
+//        if (ModelState.IsValid)
+//        {
+//            _participantService.UpdateAsync(participant);
+//            return RedirectToAction("ManageParticipants", "Event", new { id = participant.EventId });
+//        }
+//        return View(participant);
+//    }
 
-        // Osavõtja kustutamine
-        public async Task<IActionResult> Delete(int id)
-        {
-            var participant = await _participantService.GetByIdAsync(id);
-            if (participant == null)
-            {
-                return NotFound();
-            }
-
-            await _participantService.DeleteAsync(id);
-            return RedirectToAction("ManageParticipants", "Event", new { id = participant.EventId });
-        }
-    }
-}
+//    public IActionResult Delete(int id)
+//    {
+//        var participant = _participantService.GetByIdAsync(id);
+//        if (participant != null)
+//        {
+//            _participantService.DeleteAsync(participant.Result);
+//            return RedirectToAction("ManageParticipants", "Event", new { id = participant.Result.EventId });
+//        }
+//        return NotFound();
+//    }
+//}

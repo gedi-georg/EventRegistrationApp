@@ -13,6 +13,6 @@ namespace EventRegistration.Application.DTOs
         public string Name { get; set; }
         public DateTime Date { get; set; }
         public string Location { get; set; }
-        public string AdditionalInfo { get; set; }
+        public string? AdditionalInfo { get; set; }
     }
 }

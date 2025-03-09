@@ -40,6 +40,17 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Event}/{action=Index}/{id?}");
+
+//app.MapControllerRoute(
+//    name: "participant",
+//    pattern: "Participant/{action=Index}/{id?}",
+//    defaults: new { controller = "Participant", action = "Index" });
+
+//app.MapControllerRoute(
+//    name: "event",
+//    pattern: "Event/{action=Index}/{id?}",
+//    defaults: new { controller = "Event", action = "Index" });
+
 
 app.Run();

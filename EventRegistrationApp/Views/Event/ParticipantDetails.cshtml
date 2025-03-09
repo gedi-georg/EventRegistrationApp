@@ -1,4 +1,4 @@
-﻿@model EventRegistration.Domain.Models.Participant
+﻿@* @model EventRegistration.Domain.Models.Participant
 
 <div class="container mt-4">
     <h2>Muuda osavõtja andmeid</h2>
@@ -28,4 +28,26 @@
         <button type="submit" class="btn btn-success">Salvesta</button>
         <a href="@Url.Action("ManageParticipants", "Event", new { id = Model.EventId })" class="btn btn-secondary">Tagasi</a>
     </form>
-</div>
+</div> *@
+
+@model EventRegistration.Domain.Models.Participant
+
+@{
+    ViewBag.Title = "Osavõtja detail";
+}
+
+<h2>Osavõtja detail</h2>
+
+<form asp-action="ParticipantDetails" method="post">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="EventId" value="@Model.EventId" />
+    <div>
+        <label for="Name">Nimi</label>
+        <input type="text" id="PersonId" name="Person" value="@Model.PersonId" />
+    </div>
+    <div>
+        <label for="Email">Email</label>
+        <input type="text" id="CompanyId" name="Company" value="@Model.CompanyId" />
+    </div>
+    <button type="submit">Salvesta</button>
+</form>

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<EventRegistration.Domain.Models.Participant>
+
+@{
+    ViewBag.Title = "Osalejate nimekiri";
+}
+
+<h2>Osalejate nimekiri</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Person</th>
+        <th>Company</th>
+        <th>Toimingud</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var participant in Model)
+    {
+        <tr>
+            <td>@participant.PersonId</td>
+            <td>@participant.CompanyId</td>
+            <td>
+                <a asp-action="ParticipantDetails" asp-route-id="@participant.Id">Muuda</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<h3>Lisa uus osaleja</h3>
+
+<form asp-action="AddParticipant" method="post">
+    <input type="hidden" name="EventId" value="@ViewData["EventId"]" />
+    <div>
+        <label for="Name">Nimi</label>
+        <input type="text" id="Name" name="Name" />
+    </div>
+    <div>
+        <label for="Email">Email</label>
+        <input type="email" id="Email" name="Email" />
+    </div>
+    <button type="submit">Lisa</button>
+</form>

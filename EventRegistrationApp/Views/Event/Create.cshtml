@@ -1,0 +1,30 @@
+﻿@model EventRegistration.Domain.Models.Event
+
+@{
+    ViewBag.Title = "Lisa Üritus";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Lisa Üritus</h2>
+
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label for="Name" class="form-label">Ürituse nimi:</label>
+            <input type="text" class="form-control" id="Name" name="Name" required />
+        </div>
+        <div class="mb-3">
+            <label for="Date" class="form-label">Toimumisaeg:</label>
+            <input type="date" class="form-control" id="Date" name="Date" required />
+        </div>
+        <div class="mb-3">
+            <label for="Location" class="form-label">Koht:</label>
+            <input type="text" class="form-control" id="Location" name="Location" required />
+        </div>
+        <div class="mb-3">
+            <label for="AdditionalInfo" class="form-label">Lisainfo:</label>
+            <input type="text" class="form-control" id="AdditionalInfo" name="AdditionalInfo" />
+        </div>
+        <a href="@Url.Action("Index", "Event")" class="btn btn-secondary">Tagasi</a>
+        <button type="submit" class="btn btn-success">Salvesta</button>
+    </form>
+</div>

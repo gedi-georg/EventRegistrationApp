@@ -2,7 +2,7 @@ using EventRegistration.Domain.Models;
 using EventRegistration.Infra.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventRegistration.UI.Controllers
+namespace EventRegistrationApp.Controllers
 {
     public class EventController : Controller
     {
@@ -15,50 +15,31 @@ namespace EventRegistration.UI.Controllers
             _participantService = participantService;
         }
 
-        // Kuvab kõik üritused
+        // Avaleht - Ürituste nimekiri
         public async Task<IActionResult> Index()
         {
             var events = await _eventService.GetAllAsync();
-            return View(events); // Edastame andmed vaatesse
+            return View(events);
         }
 
-        // Ürituse lisamise vaade
+        // Lisa Üritus - Ürituse lisamise leht
         public IActionResult Create()
         {
             return View();
         }
 
-        // Ürituse lisamine POST päring
         [HttpPost]
         public async Task<IActionResult> Create(Event newEvent)
         {
             if (ModelState.IsValid)
             {
                 await _eventService.AddAsync(newEvent);
-                return RedirectToAction(nameof(Index)); // Ürituse lisamine viib tagasi ürituste loetellu
+                return RedirectToAction(nameof(Index));
             }
             return View(newEvent);
         }
 
-        // Ürituse detailide kuvamine
-        public async Task<IActionResult> Details(int id)
-        {
-            var eventDetails = await _eventService.GetByIdAsync(id);
-            if (eventDetails == null)
-            {
-                return NotFound();
-            }
-            return View(eventDetails);
-        }
-
-        // Ürituse kustutamine
-        public async Task<IActionResult> Delete(int id)
-        {
-            await _eventService.DeleteAsync(id);
-            return RedirectToAction(nameof(Index)); // Pärast kustutamist suunatakse tagasi loetellu
-        }
-
-        // Osavõtjate haldamine
+        // Osalejate nimekiri + Osaleja lisamise vorm
         public async Task<IActionResult> ManageParticipants(int id)
         {
             var eventDetails = await _eventService.GetByIdAsync(id);
@@ -67,8 +48,43 @@ namespace EventRegistration.UI.Controllers
                 return NotFound();
             }
 
-            var participants = await _participantService.GetParticipantsByEventIdAsync(id);
-            return View(participants); // Kuvame osavõtjate nimekirja
+            var participants = await _participantService.GetByEventIdAsync(id);
+            ViewData["EventId"] = id;
+            return View(participants);
+        }
+
+        // Osavõtja detail - Osaleja andmete muutmine
+        public async Task<IActionResult> ParticipantDetails(int id)
+        {
+            var participant = await _participantService.GetByIdAsync(id);
+            if (participant == null)
+            {
+                return NotFound();
+            }
+            return View(participant);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ParticipantDetails(Participant participant)
+        {
+            if (ModelState.IsValid)
+            {
+                await _participantService.UpdateAsync(participant);
+                return RedirectToAction(nameof(ManageParticipants), new { id = participant.EventId });
+            }
+            return View(participant);
+        }
+
+        // Ürituse kustutamine
+        public async Task<IActionResult> Delete(int id)
+        {
+            var eventToDelete = await _eventService.GetByIdAsync(id);
+            if (eventToDelete == null)
+            {
+                return NotFound();
+            }
+            await _eventService.DeleteAsync(eventToDelete);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
