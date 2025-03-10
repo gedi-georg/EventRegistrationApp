@@ -1,44 +1,93 @@
-﻿@model IEnumerable<EventRegistration.Domain.Models.Participant>
+﻿@model EventRegistrationApp.Models.EventParticipantsViewModel
 
 @{
     ViewBag.Title = "Osalejate nimekiri";
 }
 
-<h2>Osalejate nimekiri</h2>
+<div class="header bg-primary text-white d-flex justify-content-between align-items-center p-3">
+    <h1 class="mb-0">Osavõtjad</h1>
+    <img src="~/images/libled.jpg" alt="Libled" class="img-fluid" style="max-height: 80px;" />
+</div>
 
-<table>
+<h2>Ürituse info</h2>
+<div>
+    <p><strong>Ürituse nimi:</strong> @Model.Event.Name</p>
+    <p><strong>Toimumisaeg:</strong> @Model.Event.Date.ToString("dd.MM.yyyy")</p>
+    <p><strong>Koht:</strong> @Model.Event.Location</p>
+</div>
+
+<h2>Osavõtjad</h2>
+<table class="table">
     <thead>
-    <tr>
-        <th>Person</th>
-        <th>Company</th>
-        <th>Toimingud</th>
-    </tr>
+        <tr>
+            <th>Nimi</th>
+            <th>Isikukood / Ettevõte</th>
+            <th>Toimingud</th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var participant in Model)
-    {
-        <tr>
-            <td>@participant.PersonId</td>
-            <td>@participant.CompanyId</td>
-            <td>
-                <a asp-action="ParticipantDetails" asp-route-id="@participant.Id">Muuda</a>
-            </td>
-        </tr>
-    }
+        @foreach (var participant in Model.Participants)
+        {
+            <tr>
+                <td>@(participant.IsPerson ? participant.FirstName + " " + participant.LastName : participant.LegalName)</td>
+                <td>@(participant.IsPerson ? participant.PersonalIdCode : participant.RegistrationCode)</td>
+                <td>
+                    <a asp-action="Edit" asp-controller="Participant" asp-route-id="@participant.Id">Vaata</a> |
+                    <a asp-action="Delete" asp-controller="Participant" asp-route-id="@participant.Id" onclick="return confirm('Oled kindel?');">Kustuta</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
-<h3>Lisa uus osaleja</h3>
+<h3>Osavõtjate lisamine</h3>
 
-<form asp-action="AddParticipant" method="post">
-    <input type="hidden" name="EventId" value="@ViewData["EventId"]" />
+<form asp-action="AddParticipant" asp-controller="Participant" method="post">
+    <input type="hidden" name="EventId" value="@Model.Event.Id" />
     <div>
-        <label for="Name">Nimi</label>
-        <input type="text" id="Name" name="Name" />
+        <label>
+            <input type="radio" name="IsCompany" value="false" checked onchange="toggleParticipantType()"> Eraisik
+        </label>
+        <label>
+            <input type="radio" name="IsCompany" value="true" onchange="toggleParticipantType()"> Ettevõte
+        </label>
+    </div>
+    <div id="personFields">
+        <div>
+            <label for="FirstName">Eesnimi:</label>
+            <input type="text" id="FirstName" name="FirstName" value="@Model.FirstName" />
+        </div>
+        <div>
+            <label for="LastName">Perekonnanimi:</label>
+            <input type="text" id="LastName" name="LastName" value="@Model.LastName" />
+        </div>
+        <div>
+            <label for="PersonalIdCode">Isikukood:</label>
+            <input type="text" id="PersonalIdCode" name="PersonalIdCode" value="@Model.PersonalIdCode" />
+        </div>
+    </div>
+    <div id="companyFields" style="display:none;">
+        <div>
+            <label for="LegalName">Ettevõtte nimi:</label>
+            <input type="text" id="LegalName" name="LegalName" value="@Model.LegalName" />
+        </div>
+        <div>
+            <label for="RegistrationCode">Registrikood:</label>
+            <input type="text" id="RegistrationCode" name="RegistrationCode" value="@Model.RegistrationCode" />
+        </div>
     </div>
     <div>
-        <label for="Email">Email</label>
-        <input type="email" id="Email" name="Email" />
+        <label for="PaymentMethod">Makseviis:</label>
+        <select id="PaymentMethod" name="PaymentMethod" value="@Model.PaymentMethod">
+            <option value="BankTransfer">Pangaülekanne</option>
+            <option value="Cash">Sularaha</option>
+        </select>
     </div>
-    <button type="submit">Lisa</button>
+    <div>
+        <label for="AdditionalInfo">Lisainfo:</label>
+        <textarea id="AdditionalInfo" name="AdditionalInfo">@Model.AdditionalInfo</textarea>
+    </div>
+    <button type="submit">Salvesta</button>
 </form>
+
+<a asp-action="Index">Tagasi</a>

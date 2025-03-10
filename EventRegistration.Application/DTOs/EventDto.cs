@@ -1,4 +1,5 @@
 ﻿using EventRegistration.Domain;
+using EventRegistration.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace EventRegistration.Application.DTOs
         public DateTime Date { get; set; }
         public string Location { get; set; }
         public string? AdditionalInfo { get; set; }
+        public ICollection<Participant?> Participants { get; set; }
     }
 }

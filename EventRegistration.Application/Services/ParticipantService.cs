@@ -1,55 +1,76 @@
-﻿using EventRegistration.Application.DTOs;
-using EventRegistration.Application.Helpers;
-using EventRegistration.Domain;
-using EventRegistration.Infra.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using EventRegistration.Application.DTOs;
+using EventRegistration.Application.Helpers;
+using EventRegistration.Application.Interfaces;
+using EventRegistration.Domain.Models;
+using EventRegistration.Infra.Interfaces;
 
 namespace EventRegistration.Application.Services
 {
-    public class ParticipantService
+    public class ParticipantService : IParticipantService
     {
-        private readonly IParticipantService _participantService;
-        private readonly IPersonService _personService;
-        private readonly ICompanyService _companyService;
+        private readonly IParticipantRepo _participantRepo;
         private readonly MappingHelper _mappingHelper;
 
-        public ParticipantService(IParticipantService participantService, IPersonService personService, ICompanyService companyService, MappingHelper mappingHelper)
+        public ParticipantService(IParticipantRepo participantRepo, MappingHelper mappingHelper)
         {
-            _participantService = participantService;
-            _personService = personService;
-            _companyService = companyService;
+            _participantRepo = participantRepo;
             _mappingHelper = mappingHelper;
+        }
+
+        public async Task<ParticipantDto> GetParticipantById(Guid id)
+        {
+            var participant = await _participantRepo.GetByIdAsync(id);
+            if (participant == null)
+                return null;
+
+            return _mappingHelper.GetParticipantDto(participant);
+        }
+
+        public async Task<ParticipantDto> GetParticipantByEventId(Guid id)
+        {
+            var participant = await _participantRepo.GetByEventIdAsync(id);
+            if (participant == null)
+                return null;
+
+            return _mappingHelper.GetParticipantDto(participant.First());
         }
 
         public async Task AddParticipantAsync(ParticipantDto participantDto)
         {
-            var eventEntity = await _participantService.GetByIdAsync(participantDto.EventId);
-            if (eventEntity == null) throw new KeyNotFoundException("Event not found");
-
             var participant = _mappingHelper.CreateParticipantFromDto(participantDto);
+            await _participantRepo.AddAsync(participant);
+        }
 
-            if (participantDto.Person != null)
-            {
-                if (!ValidationHelper.IsValidPersonalId(participantDto.Person.PersonalIdCode))
-                    throw new ArgumentException("Invalid personal ID code");
+        public async Task UpdateParticipant(ParticipantDto participantDto)
+        {
+            var participant = await _participantRepo.GetByIdAsync(participantDto.Id);
+            if (participant == null)
+                throw new KeyNotFoundException("Participant not found");
 
-                var person = _mappingHelper.CreatePersonFromDto(participantDto.Person);
-                await _personService.AddAsync(person);
-                participant.PersonId = person.Id;
-            }
+            participant.Id = participantDto.Id;
+            participant.EventId = participantDto.EventId;
+            participant.PaymentMethod = participantDto.PaymentMethod;
+            participant.AdditionalInfo = participantDto.AdditionalInfo;
+            participant.IsPerson = participantDto.IsPerson;
+            participant.FirstName = participantDto.FirstName;
+            participant.LastName = participantDto.LastName;
+            participant.PersonalIdCode = participantDto.PersonalIdCode;
+            participant.LegalName = participantDto.LegalName;
+            participant.RegistrationCode = participantDto.RegistrationCode;
+            participant.ParticipantsCount = participantDto.ParticipantsCount;
 
-            if (participantDto.Company != null)
-            {
-                var company = _mappingHelper.CreateCompanyFromDto(participantDto.Company);
-                await _companyService.AddAsync(company);
-                participant.CompanyId = company.Id;
-            }
+            await _participantRepo.UpdateAsync(participant);
+        }
 
-            await _participantService.AddAsync(participant);
+        public async Task DeleteParticipant(Guid id)
+        {
+            var participant = await _participantRepo.GetByIdAsync(id);
+            if (participant == null)
+                throw new KeyNotFoundException("Participant not found");
+
+            await _participantRepo.DeleteAsync(participant);
         }
     }
 }

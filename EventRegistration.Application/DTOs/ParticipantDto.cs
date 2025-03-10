@@ -9,17 +9,35 @@ namespace EventRegistration.Application.DTOs
 {
     public class ParticipantDto
     {
-        public int EventId { get; set; }
-        public PersonDto Person { get; set; }
-        public CompanyDto Company { get; set; }
+        public Guid Id { get; set; }
+        public Guid EventId { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public string AdditionalInfo { get; set; }
+        public bool IsPerson { get; set; }
 
-        public Participant ToEntity() => new Participant
-        {
-            EventId = EventId,
-            PaymentMethod = PaymentMethod,
-            AdditionalInfo = AdditionalInfo
-        };
+        // person
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string PersonalIdCode { get; set; }
+
+        // company
+        public string LegalName { get; set; }
+        public string RegistrationCode { get; set; }
+        public int ParticipantsCount { get; set; }
+
+        //public Participant ToEntity() => new Participant
+        //{
+        //    Id = new Guid(),
+        //    EventId = EventId,
+        //    PaymentMethod = PaymentMethod,
+        //    AdditionalInfo = AdditionalInfo,
+        //    IsPerson = IsPerson,
+        //    FirstName = FirstName,
+        //    LastName = LastName,
+        //    PersonalIdCode = PersonalIdCode,
+        //    LegalName = LegalName,
+        //    RegistrationCode = RegistrationCode,
+        //    ParticipantsCount = ParticipantsCount
+        //};
     }
 }

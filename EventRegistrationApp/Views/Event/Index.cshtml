@@ -1,34 +1,85 @@
-﻿@model IEnumerable<EventRegistration.Domain.Models.Event>
+﻿@model IEnumerable<EventRegistration.Application.DTOs.EventDto>
 
 @{
     ViewBag.Title = "Ürituste nimekiri";
+    var currentDate = DateTime.Now;
+    var upcomingEvents = Model.Where(e => e.Date >= currentDate);
+    var pastEvents = Model.Where(e => e.Date < currentDate);
 }
 
 <div class="container mt-4">
-    <h2 class="mb-4">Ürituste nimekiri</h2>
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="p-3 mb-2 bg-primary text-white">
+                <h2>Ürituste nimekiri</h2>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <img src="~/images/pilt.jpg" class="img-fluid" alt="Ürituste pilt" />
+        </div>
+    </div>
 
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Nimi</th>
-            <th>Kuupäev</th>
-            <th>Toimingud</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var eventItem in Model)
-        {
-            <tr>
-                <td>@eventItem.Name</td>
-                <td>@eventItem.Date.ToString("dd.MM.yyyy")</td>
-                <td>
-                    <a asp-action="ManageParticipants" asp-route-id="@eventItem.Id" class="btn btn-info btn-sm">Osalejad</a>
-                    <a asp-action="Delete" asp-route-id="@eventItem.Id" class="btn btn-danger btn-sm">Kustuta</a>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Tulevased üritused</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <tbody>
+                            @{
+                                var rowIndex = 1;
+                            }
+                            @foreach (var eventItem in upcomingEvents)
+                            {
+                                <tr>
+                                    <td>@rowIndex.</td>
+                                    <td>@eventItem.Name</td>
+                                    <td>@eventItem.Date.ToString("dd.MM.yyyy")</td>
+                                    <td>
+                                        <a asp-action="ManageParticipants" asp-route-id="@eventItem.Id" class="btn btn-info btn-sm">Osavõtjad</a>
+                                        <a asp-action="Delete" asp-route-id="@eventItem.Id" class="btn btn-danger btn-sm">
+                                            <img src="~/images/remove.svg" onclick="return confirm('Oled kindel?');" alt="Kustuta" class="img-fluid" style="width: 16px; height: 16px;" />
+                                        </a>
+                                    </td>
+                                </tr>
+                                rowIndex++;
+                            }
+                        </tbody>
+                    </table>
+                    <a asp-action="Create" class="btn btn-primary">Lisa üritus</a>
+                </div>
+            </div>
+        </div>
 
-    <a asp-action="Create" class="btn btn-primary">Lisa uus üritus</a>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Toimunud üritused</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <tbody>
+                            @{
+                                var rowIndex2 = 1;
+                            }
+                            @foreach (var eventItem in pastEvents)
+                            {
+                                <tr>
+                                    <td>@rowIndex2.</td>
+                                    <td>@eventItem.Name</td>
+                                    <td>@eventItem.Date.ToString("dd.MM.yyyy")</td>
+                                    <td>
+                                        <a asp-action="ManageParticipants" asp-route-id="@eventItem.Id" class="btn btn-info btn-sm">Osavõtjad</a>
+                                    </td>
+                                </tr>
+                                rowIndex2++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

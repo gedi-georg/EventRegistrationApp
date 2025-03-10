@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventRegistration.Infra.Repos
 {
-    public class EventRepo : IEventService
+    public class EventRepo : IEventRepo
     {
         private readonly ApplicationDbContext _context;
 
@@ -13,7 +13,7 @@ namespace EventRegistration.Infra.Repos
             _context = context;
         }
 
-        public async Task<Event> GetByIdAsync(int id)
+        public async Task<Event?> GetByIdAsync(Guid id)
         {
             return await _context.Events
                 .Include(e => e.Participants)
@@ -27,19 +27,19 @@ namespace EventRegistration.Infra.Repos
                 .ToListAsync();
         }
 
-        public async Task AddAsync(Event eventEntity)
+        public async Task AddAsync(Event? eventEntity)
         {
             await _context.Events.AddAsync(eventEntity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Event eventEntity)
+        public async Task DeleteAsync(Event? eventEntity)
         {
             _context.Events.Remove(eventEntity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Event eventEntity)
+        public async Task UpdateAsync(Event? eventEntity)
         {
             _context.Events.Update(eventEntity);
             await _context.SaveChangesAsync();

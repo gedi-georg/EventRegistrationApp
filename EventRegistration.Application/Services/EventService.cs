@@ -6,25 +6,26 @@ using System.Text;
 using System.Threading.Tasks;
 using EventRegistration.Infra.Interfaces;
 using EventRegistration.Application.Helpers;
+using EventRegistration.Domain.Models;
 
 namespace EventRegistration.Application.Services
 {
     public class EventService
     {
-        private readonly IEventService _eventService;
-        private readonly IParticipantService _participantService;
+        private readonly IEventRepo _eventRepo;
+        private readonly IParticipantRepo _participantRepo;
         private readonly MappingHelper _mappingHelper;
 
-        public EventService(IEventService eventService, MappingHelper mappingHelper, IParticipantService participantService)
+        public EventService(IEventRepo eventRepo, MappingHelper mappingHelper, IParticipantRepo participantRepo)
         {
-            _eventService = eventService;
+            _eventRepo = eventRepo;
             _mappingHelper = mappingHelper;
-            _participantService = participantService;
+            _participantRepo = participantRepo;
         }
 
         public async Task<IEnumerable<EventDto>> GetAllEventsAsync()
         {
-            var events = await _eventService.GetAllAsync();
+            var events = await _eventRepo.GetAllAsync();
             var eventDtos = new List<EventDto>();
 
             foreach (var eventEntity in events)
@@ -34,9 +35,9 @@ namespace EventRegistration.Application.Services
             return eventDtos;
         }
 
-        public async Task<EventDto> GetEventByIdAsync(int id)
+        public async Task<EventDto> GetEventByIdAsync(Guid id)
         {
-            var eventEntity = await _eventService.GetByIdAsync(id);
+            var eventEntity = await _eventRepo.GetByIdAsync(id);
             return eventEntity == null ? null : _mappingHelper.GetEventDto(eventEntity);
         }
 
@@ -46,20 +47,20 @@ namespace EventRegistration.Application.Services
                 throw new ArgumentException("Event date must be in the future.");
 
             var eventEntity = _mappingHelper.CreateEventFromDto(eventDto);
-            await _eventService.AddAsync(eventEntity);
+            await _eventRepo.AddAsync(eventEntity);
         }
 
-        public async Task DeleteEventAsync(int id)
+        public async Task DeleteEventAsync(Guid id)
         {
-            var eventEntity = await _eventService.GetByIdAsync(id);
+            var eventEntity = await _eventRepo.GetByIdAsync(id);
             if (eventEntity == null) throw new KeyNotFoundException("Event not found");
 
-            await _eventService.DeleteAsync(eventEntity);
+            await _eventRepo.DeleteAsync(eventEntity);
         }
 
-        public async Task<IEnumerable<ParticipantDto>> GetParticipantsByEventIdAsync(int eventId)
+        public async Task<IEnumerable<ParticipantDto>> GetParticipantsByEventIdAsync(Guid eventId)
         {
-            var participants = await _participantService.GetByEventIdAsync(eventId);
+            var participants = await _participantRepo.GetByEventIdAsync(eventId);
             var participantDtos = new List<ParticipantDto>();
 
             foreach (var participant in participants)

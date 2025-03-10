@@ -11,10 +11,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register services for dependency injection
-builder.Services.AddScoped<IEventService, EventRepo>();
-builder.Services.AddScoped<IParticipantService, ParticipantRepo>();
-builder.Services.AddScoped<IPersonService, PersonRepo>();
-builder.Services.AddScoped<ICompanyService, CompanyRepo>();
+builder.Services.AddScoped<IEventRepo, EventRepo>();
+builder.Services.AddScoped<IParticipantRepo, ParticipantRepo>();
+builder.Services.AddScoped<IPersonRepo, PersonRepo>();
+builder.Services.AddScoped<ICompanyRepo, CompanyRepo>();
 
 
 // Add services to the container.
@@ -41,6 +41,10 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Event}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Participant}/{action=Index}/{id?}");
 
 //app.MapControllerRoute(
 //    name: "participant",

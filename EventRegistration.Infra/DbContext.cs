@@ -7,10 +7,8 @@ namespace EventRegistration.Infra
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-        public DbSet<Event> Events { get; set; }
-        public DbSet<Participant> Participants { get; set; }
-        public DbSet<Person> Persons { get; set; }
-        public DbSet<Company> Companies { get; set; }
+        public DbSet<Event?> Events { get; set; }
+        public DbSet<Participant?> Participants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,18 +18,6 @@ namespace EventRegistration.Infra
                 .HasOne(p => p.Event)
                 .WithMany(e => e.Participants)
                 .HasForeignKey(p => p.EventId);
-
-            modelBuilder.Entity<Participant>()
-                .HasOne(p => p.Person)
-                .WithMany(p => p.Participants)
-                .HasForeignKey(p => p.PersonId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            modelBuilder.Entity<Participant>()
-                .HasOne(p => p.Company)
-                .WithMany(c => c.Participants)
-                .HasForeignKey(p => p.CompanyId)
-                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Participant>()
                 .Property(p => p.PaymentMethod)

@@ -23,39 +23,19 @@ namespace EventRegistration.Application.Helpers
             return _mapper.Map<EventDto>(eventEntity);
         }
 
-        public Event CreateEventFromDto(EventDto eventDto)
+        public Event? CreateEventFromDto(EventDto eventDto)
         {
             return _mapper.Map<Event>(eventDto);
         }
 
-        public ParticipantDto GetParticipantDto(Participant participantEntity)
+        public ParticipantDto GetParticipantDto(Participant? participantEntity)
         {
             return _mapper.Map<ParticipantDto>(participantEntity);
         }
 
-        public Participant CreateParticipantFromDto(ParticipantDto participantDto)
+        public Participant? CreateParticipantFromDto(ParticipantDto participantDto)
         {
             return _mapper.Map<Participant>(participantDto);
-        }
-
-        public PersonDto GetPersonDto(Person personEntity)
-        {
-            return _mapper.Map<PersonDto>(personEntity);
-        }
-
-        public Person CreatePersonFromDto(PersonDto personDto)
-        {
-            return _mapper.Map<Person>(personDto);
-        }
-
-        public CompanyDto GetCompanyDto(Company companyEntity)
-        {
-            return _mapper.Map<CompanyDto>(companyEntity);
-        }
-
-        public Company CreateCompanyFromDto(CompanyDto companyDto)
-        {
-            return _mapper.Map<Company>(companyDto);
         }
 
     }
