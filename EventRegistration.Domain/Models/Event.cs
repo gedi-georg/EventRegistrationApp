@@ -12,12 +12,6 @@ namespace EventRegistration.Domain.Models
         public DateTime Date { get; set; }
         public string Location { get; set; }
         public string? AdditionalInfo { get; set; }
-
-        public ICollection<Participant> Participants { get; set; }
-
-        public Event()
-        {
-            Participants = new List<Participant>();
-        }
+        public ICollection<EventParticipant> EventParticipants { get; set; } = new List<EventParticipant>();
     }
 }

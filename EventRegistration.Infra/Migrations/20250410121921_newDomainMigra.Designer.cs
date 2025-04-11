@@ -4,6 +4,7 @@ using EventRegistration.Infra;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventRegistration.Infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250410121921_newDomainMigra")]
+    partial class newDomainMigra
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,14 +58,9 @@ namespace EventRegistration.Infra.Migrations
                     b.Property<Guid>("ParticipantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PaymentMethodId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("EventId", "ParticipantId");
 
                     b.HasIndex("ParticipantId");
-
-                    b.HasIndex("PaymentMethodId");
 
                     b.ToTable("EventParticipants");
                 });
@@ -81,6 +79,9 @@ namespace EventRegistration.Infra.Migrations
                         .HasMaxLength(13)
                         .HasColumnType("nvarchar(13)");
 
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Participants");
@@ -88,33 +89,6 @@ namespace EventRegistration.Infra.Migrations
                     b.HasDiscriminator().HasValue("Participant");
 
                     b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("EventRegistration.Domain.Models.PaymentMethod", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PaymentMethods");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Name = "Pangaülekanne"
-                        },
-                        new
-                        {
-                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            Name = "Sularaha"
-                        });
                 });
 
             modelBuilder.Entity("EventRegistration.Domain.Models.Company", b =>
@@ -168,17 +142,9 @@ namespace EventRegistration.Infra.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EventRegistration.Domain.Models.PaymentMethod", "PaymentMethod")
-                        .WithMany()
-                        .HasForeignKey("PaymentMethodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Event");
 
                     b.Navigation("Participant");
-
-                    b.Navigation("PaymentMethod");
                 });
 
             modelBuilder.Entity("EventRegistration.Domain.Models.Event", b =>

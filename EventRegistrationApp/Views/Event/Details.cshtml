@@ -1,0 +1,91 @@
+﻿@* @model EventRegistration.Application.DTOs.EventDto
+
+@{
+    ViewBag.Title = "Osalejate nimekiri";
+    var isPastEvent = Model.Date < DateTime.Now;
+}
+
+<div class="header bg-primary text-white d-flex justify-content-between align-items-center p-3">
+    <h1 class="mb-0">Osavõtjad</h1>
+    <img src="~/images/libled.jpg" alt="Libled" class="img-fluid" style="max-height: 80px;" />
+</div>
+
+<h2>Ürituse info</h2>
+<div>
+    <p><strong>Ürituse nimi:</strong> @Model.Name</p>
+    <p><strong>Toimumisaeg:</strong> @Model.Date.ToString("dd.MM.yyyy")</p>
+    <p><strong>Koht:</strong> @Model.Location</p>
+</div>
+
+<h2>Osavõtjad</h2>
+
+@if (!isPastEvent)
+{
+    <a asp-action="AddParticipant" class="btn btn-primary mb-3">Lisa osavõtja</a>
+}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Nimi</th>
+        <th>Isikukood / Ettevõte</th>
+        <th>Toimingud</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var participant in Model.Participants)
+    {
+        <tr>
+            <td>@(participant.IsPerson ? participant.FirstName + " " + participant.LastName : participant.LegalName)</td>
+            <td>@(participant.IsPerson ? participant.PersonalIdCode : participant.RegistrationCode)</td>
+            <td>
+                <a asp-action="Details" asp-controller="Participant" asp-route-id="@participant.Id">Vaata</a> |
+                @if (Model.Date > DateTime.Now)
+                {
+                    <a asp-action="DeleteParticipant" asp-controller="Event" asp-route-id="@participant.Id" onclick="return confirm('Oled kindel?');">Kustuta</a>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Tagasi</a> *@
+
+
+
+@model EventRegistration.Application.DTOs.EventDto
+
+@{
+    ViewData["Title"] = "Event Details";
+}
+
+<h1>@Model.Name</h1>
+<p><strong>Date:</strong> @Model.Date.ToShortDateString()</p>
+
+<h3>Participants</h3>
+<a asp-controller="Participant" asp-action="Create" asp-route-eventId="@Model.Id" class="btn btn-primary mb-2">Add Participant</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var participant in Model.Participants)
+        {
+            <tr>
+                <td>@participant.FullName</td>
+                <td>
+                    <a asp-controller="Participant" asp-action="Details" asp-route-id="@participant.Id" class="btn btn-sm btn-info">View</a>
+                    <a asp-action="DeleteParticipant" asp-route-id="@participant.Id" class="btn btn-sm btn-danger">Remove</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Back to Events</a>

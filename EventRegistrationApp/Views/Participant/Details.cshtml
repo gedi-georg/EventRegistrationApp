@@ -1,0 +1,139 @@
+﻿@* @using EventRegistration.Domain.Models
+@model EventRegistration.Application.DTOs.ParticipantDto
+
+@{
+    ViewBag.Title = "Osavõtja detailvaade";
+}
+
+<h3>Osavõtja detailvaade</h3>
+
+<form asp-action="Edit" asp-controller="Participant" method="post">
+    <input type="hidden" name="EventId" value="@Model.Id" />
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <div id="personFields" style="display: @(Model.IsPerson ? "block" : "none");">
+        <div>
+            <label for="FirstName">Eesnimi:</label>
+            <input type="text" id="FirstName" name="FirstName" value="@Model.FirstName" />
+        </div>
+        <div>
+            <label for="LastName">Perekonnanimi:</label>
+            <input type="text" id="LastName" name="LastName" value="@Model.LastName" />
+        </div>
+        <div>
+            <label for="PersonalIdCode">Isikukood:</label>
+            <input type="text" id="PersonalIdCode" name="PersonalIdCode" value="@Model.PersonalIdCode" />
+        </div>
+    </div>
+
+    <div id="companyFields" style="display: @(Model.IsPerson ? "none" : "block");">
+        <div>
+            <label for="LegalName">Ettevõtte nimi:</label>
+            <input type="text" id="LegalName" name="LegalName" value="@Model.LegalName" />
+        </div>
+        <div>
+            <label for="RegistrationCode">Registrikood:</label>
+            <input type="text" id="RegistrationCode" name="RegistrationCode" value="@Model.RegistrationCode" />
+        </div>
+        <div>
+            <label for="ParticipantsCount">Osavõtjate arv:</label>
+            <input type="number" id="ParticipantsCount" name="ParticipantsCount" value="@Model.ParticipantsCount" />
+        </div>
+    </div>
+
+    <div>
+        <label for="PaymentMethod">Makseviis:</label>
+        <select id="PaymentMethod" name="PaymentMethod">
+            <option value="BankTransfer">@(Model.PaymentMethod == PaymentMethod.BankTransfer ? "selected" : "")</option>
+            <option value="Cash">@(Model.PaymentMethod == PaymentMethod.Cash ? "selected" : "")</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="AdditionalInfo">Lisainfo:</label>
+        <textarea id="AdditionalInfo" name="AdditionalInfo">@Model.AdditionalInfo</textarea>
+    </div>
+
+    <button type="submit">Salvesta</button>
+</form>
+
+<a asp-controller="Event" asp-action="Details">Tagasi</a>
+
+<script>
+    function toggleParticipantType() {
+        var isCompany = document.querySelector('input[name="IsCompany"]:checked').value === "true";
+        document.getElementById("personFields").style.display = isCompany ? "none" : "block";
+        document.getElementById("companyFields").style.display = isCompany ? "block" : "none";
+    }
+
+    // Tagab, et lehe laadimisel on õige väljade olek
+    document.addEventListener("DOMContentLoaded", toggleParticipantType);
+</script>
+ *@
+ 
+
+
+@model EventRegistration.Application.DTOs.ParticipantDto
+@{
+    var isPerson = Model is EventRegistration.Application.DTOs.PersonDto;
+    var isCompany = Model is EventRegistration.Application.DTOs.CompanyDto;
+}
+
+<h2>@(isPerson ? "Person Details and Edit" : isCompany ? "Company Details and Edit" : "Participant Details and Edit")</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="PaymentMethodName">Payment Method</label>
+        <input type="text" id="PaymentMethodName" name="PaymentMethodName" class="form-control" value="@Model.PaymentMethodName" />
+    </div>
+
+    <div class="form-group">
+        <label for="AdditionalInfo">Additional Information</label>
+        <textarea id="AdditionalInfo" name="AdditionalInfo" class="form-control">@Model.AdditionalInfo</textarea>
+    </div>
+
+    @if (isPerson)
+    {
+        var person = Model as EventRegistration.Application.DTOs.PersonDto;
+        <div class="form-group">
+            <label for="FirstName">First Name</label>
+            <input type="text" id="FirstName" name="FirstName" class="form-control" value="@person.FirstName" />
+        </div>
+
+        <div class="form-group">
+            <label for="LastName">Last Name</label>
+            <input type="text" id="LastName" name="LastName" class="form-control" value="@person.LastName" />
+        </div>
+
+        <div class="form-group">
+            <label for="PersonalIdCode">Personal ID Code</label>
+            <input type="text" id="PersonalIdCode" name="PersonalIdCode" class="form-control" value="@person.PersonalIdCode" />
+        </div>
+    }
+
+    @if (isCompany)
+    {
+        var company = Model as EventRegistration.Application.DTOs.CompanyDto;
+        <div class="form-group">
+            <label for="LegalName">Legal Name</label>
+            <input type="text" id="LegalName" name="LegalName" class="form-control" value="@company.LegalName" />
+        </div>
+
+        <div class="form-group">
+            <label for="RegistrationCode">Registration Code</label>
+            <input type="text" id="RegistrationCode" name="RegistrationCode" class="form-control" value="@company.RegistrationCode" />
+        </div>
+
+        <div class="form-group">
+            <label for="ParticipantsCount">Participants Count</label>
+            <input type="number" id="ParticipantsCount" name="ParticipantsCount" class="form-control" value="@company.ParticipantsCount" />
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+}
+
+<a href="@Url.Action("Details", "Event", new { id = Model.Id })" class="btn btn-secondary">Cancel</a>

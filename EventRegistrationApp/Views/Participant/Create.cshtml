@@ -1,0 +1,103 @@
+﻿@* @model EventRegistration.Application.DTOs.ParticipantDto
+
+@{
+    ViewBag.Title = "Osavõtjate lisamine";
+}
+
+<h3>Osavõtjate lisamine</h3>
+
+<form asp-action="Create" asp-controller="Participant" method="post">
+    <input type="hidden" name="EventId" value="@Model.EventId" />
+
+    <div>
+        <label>
+            <input type="radio" name="IsCompany" value="false" checked onchange="toggleParticipantType()"> Eraisik
+        </label>
+        <label>
+            <input type="radio" name="IsCompany" value="true" onchange="toggleParticipantType()"> Ettevõte
+        </label>
+    </div>
+
+    <div id="personFields">
+        <div>
+            <label for="FirstName">Eesnimi:</label>
+            <input type="text" id="FirstName" name="FirstName" value="@Model.FirstName" />
+        </div>
+        <div>
+            <label for="LastName">Perekonnanimi:</label>
+            <input type="text" id="LastName" name="LastName" value="@Model.LastName" />
+        </div>
+        <div>
+            <label for="PersonalIdCode">Isikukood:</label>
+            <input type="text" id="PersonalIdCode" name="PersonalIdCode" value="@Model.PersonalIdCode" />
+        </div>
+    </div>
+
+    <div id="companyFields" style="display: none;">
+        <div>
+            <label for="LegalName">Ettevõtte nimi:</label>
+            <input type="text" id="LegalName" name="LegalName" value="@Model.LegalName" />
+        </div>
+        <div>
+            <label for="RegistrationCode">Registrikood:</label>
+            <input type="text" id="RegistrationCode" name="RegistrationCode" value="@Model.RegistrationCode" />
+        </div>
+        <div>
+            <label for="ParticipantsCount">Osavõtjate arv:</label>
+            <input type="number" id="ParticipantsCount" name="ParticipantsCount" value="@Model.ParticipantsCount" />
+        </div>
+    </div>
+
+    <div>
+        <label for="PaymentMethod">Makseviis:</label>
+        <select id="PaymentMethod" name="PaymentMethod">
+            <option value="BankTransfer">Pangaülekanne</option>
+            <option value="Cash">Sularaha</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="AdditionalInfo">Lisainfo:</label>
+        <textarea id="AdditionalInfo" name="AdditionalInfo">@Model.AdditionalInfo</textarea>
+    </div>
+
+    <button type="submit">Salvesta</button>
+</form>
+
+<a asp-controller="Event" asp-action="Details">Tagasi</a>
+
+<script>
+    function toggleParticipantType() {
+        var isCompany = document.querySelector('input[name="IsCompany"]:checked').value === "true";
+        document.getElementById("personFields").style.display = isCompany ? "none" : "block";
+        document.getElementById("companyFields").style.display = isCompany ? "block" : "none";
+    }
+
+    // Tagab, et lehe laadimisel on õige väljade olek
+    document.addEventListener("DOMContentLoaded", toggleParticipantType);
+</script>
+ *@
+ 
+ 
+
+@model EventRegistration.Application.DTOs.ParticipantDto
+
+@{
+    ViewData["Title"] = "Add Participant";
+}
+
+<h1>Add Participant</h1>
+
+<form asp-action="Create">
+    <input type="hidden" asp-for="EventId" />
+
+    <div class="form-group">
+        <label asp-for="PaymentMethodId"></label>
+        <select asp-for="PaymentMethodId" class="form-control" asp-items="ViewBag.PaymentMethods"></select>
+        <span asp-validation-for="PaymentMethodId" class="text-danger" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Add</button>
+    <a asp-controller="Event" asp-action="Details" asp-route-id="@Model.EventId" class="btn btn-secondary">Back</a>
+</form>
+

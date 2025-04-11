@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using System.Text.RegularExpressions;
 
-namespace EventRegistration.Application.Helpers
+namespace EventRegistration.Application.Helpers;
+
+public static class ValidationHelper
 {
-    public static class ValidationHelper
+    public static bool IsValidPersonalId(string personalId)
     {
-        public static bool IsValidPersonalId(string personalId)
-        {
-            return personalId.Length == 11 && personalId.All(char.IsDigit);
-        }
+        //return personalId.Length == 11 && personalId.All(char.IsDigit);
+        return Regex.IsMatch(personalId, @"^\d{11}$");
     }
 }

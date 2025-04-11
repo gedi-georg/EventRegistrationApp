@@ -38,9 +38,9 @@
                                     <td>@eventItem.Name</td>
                                     <td>@eventItem.Date.ToString("dd.MM.yyyy")</td>
                                     <td>
-                                        <a asp-action="ManageParticipants" asp-route-id="@eventItem.Id" class="btn btn-info btn-sm">Osavõtjad</a>
+                                        <a asp-action="Details" asp-route-id="@eventItem.Id" class="btn btn-info btn-sm">Osavõtjad</a>
                                         <a asp-action="Delete" asp-route-id="@eventItem.Id" class="btn btn-danger btn-sm">
-                                            <img src="~/images/remove.svg" onclick="return confirm('Oled kindel?');" alt="Kustuta" class="img-fluid" style="width: 16px; height: 16px;" />
+                                            <img src="~/images/remove.svg" class="img-fluid" style="width: 16px; height: 16px;" alt="Kustuta"/>
                                         </a>
                                     </td>
                                 </tr>
@@ -71,7 +71,7 @@
                                     <td>@eventItem.Name</td>
                                     <td>@eventItem.Date.ToString("dd.MM.yyyy")</td>
                                     <td>
-                                        <a asp-action="ManageParticipants" asp-route-id="@eventItem.Id" class="btn btn-info btn-sm">Osavõtjad</a>
+                                        <a asp-action="Details" asp-route-id="@eventItem.Id" class="btn btn-info btn-sm">Osavõtjad</a>
                                     </td>
                                 </tr>
                                 rowIndex2++;

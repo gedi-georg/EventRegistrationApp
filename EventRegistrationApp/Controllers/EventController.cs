@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using EventRegistration.Application.DTOs;
 using EventRegistration.Application.Interfaces;
-using EventRegistration.Domain.Models;
-using EventRegistration.Infra.Interfaces;
-using EventRegistrationApp.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EventRegistrationApp.Controllers;
 
 public class EventController : Controller
 {
@@ -19,16 +17,16 @@ public class EventController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var events = await _eventService.GetAllEventsAsync();
+        var events = await _eventService.GetAllAsync();
         return View(events);
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> Create(EventDto eventDto)
     {
         if (ModelState.IsValid)
         {
-            await _eventService.AddEventAsync(eventDto);
+            await _eventService.AddAsync(eventDto);
             return RedirectToAction(nameof(Index));
         }
         return View(eventDto);
@@ -36,31 +34,53 @@ public class EventController : Controller
 
     public async Task<IActionResult> Details(Guid id)
     {
-        var eventDetails = await _eventService.GetEventByIdAsync(id);
+        var eventDetails = await _eventService.GetByIdAsync(id);
         if (eventDetails == null)
         {
             return NotFound();
         }
 
-        var participants = await _participantService.GetParticipantByEventId(id);
-        var viewModel = new EventParticipantsViewModel
-        {
-            Event = eventDetails,
-            Participants = participants.ToList()
-        };
+        var participants = await _participantService.GetParticipantsByEventId(id);
+        eventDetails.Participants = participants;
 
-        return View(viewModel);
+        return View(eventDetails);
     }
+    
 
-    [HttpPost]
-    public async Task<IActionResult> AddParticipant(Guid eventId, ParticipantDto participantDto)
+
+
+
+
+    public async Task<IActionResult> AddParticipant(Guid eventId)
     {
-        if (ModelState.IsValid)
-        {
-            participantDto.EventId = eventId;
-            await _participantService.AddParticipantAsync(participantDto);
-            return RedirectToAction(nameof(Details), new { id = eventId });
-        }
-        return View(model);
+        var eventDto = await _eventService.GetByIdAsync(eventId);
+        return RedirectToPage("Create", "Participant", eventId);
+        return NotFound();
     }
+    
+    public async Task<IActionResult> DeleteParticipant(Guid id)
+    {
+        var participant = await _participantService.GetParticipantById(id);
+        if (participant == null)
+        {
+            return NotFound();
+        }
+
+        await _participantService.DeleteParticipant(id);
+        return RedirectToAction(nameof(Details), new { id = participant.EventId });
+    }
+    
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var eventDetails = await _eventService.GetByIdAsync(id);
+        if (eventDetails == null)
+        {
+            return NotFound();
+        }
+
+        await _eventService.DeleteAsync(id);
+        return RedirectToAction(nameof(Index));
+    }
+
+
 }

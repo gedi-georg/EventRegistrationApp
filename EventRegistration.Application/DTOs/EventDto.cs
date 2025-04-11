@@ -10,11 +10,11 @@ namespace EventRegistration.Application.DTOs
 {
     public class EventDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public DateTime Date { get; set; }
         public string Location { get; set; }
         public string? AdditionalInfo { get; set; }
-        public ICollection<Participant?> Participants { get; set; }
+        public List<ParticipantDto> Participants { get; set; } = new();
     }
 }

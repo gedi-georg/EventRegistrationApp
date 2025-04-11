@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventRegistration.Infra", "
 		{7F8A139D-970D-49FD-A64F-6B1C5152BA59} = {7F8A139D-970D-49FD-A64F-6B1C5152BA59}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventRegistration.Application", "EventRegistration.Application\EventRegistration.Application.csproj", "{E99717C2-BA80-4163-99B7-4BD985EC81DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventRegistration.Application", "EventRegistration.Application\EventRegistration.Application.csproj", "{E99717C2-BA80-4163-99B7-4BD985EC81DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

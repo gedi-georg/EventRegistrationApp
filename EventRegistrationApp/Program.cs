@@ -1,3 +1,6 @@
+using EventRegistration.Application.Helpers;
+using EventRegistration.Application.Interfaces;
+using EventRegistration.Application.Services;
 using EventRegistration.Infra;
 using EventRegistration.Infra.Interfaces;
 using EventRegistration.Infra.Repos;
@@ -13,9 +16,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Register services for dependency injection
 builder.Services.AddScoped<IEventRepo, EventRepo>();
 builder.Services.AddScoped<IParticipantRepo, ParticipantRepo>();
-builder.Services.AddScoped<IPersonRepo, PersonRepo>();
-builder.Services.AddScoped<ICompanyRepo, CompanyRepo>();
+builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+builder.Services.AddScoped<IEventParticipantRepository, EventParticipantRepository>();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IParticipantService, ParticipantService>();
+builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
 
+
+// Register AutoMapper and add the MappingProfile
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -45,16 +54,6 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Participant}/{action=Index}/{id?}");
-
-//app.MapControllerRoute(
-//    name: "participant",
-//    pattern: "Participant/{action=Index}/{id?}",
-//    defaults: new { controller = "Participant", action = "Index" });
-
-//app.MapControllerRoute(
-//    name: "event",
-//    pattern: "Event/{action=Index}/{id?}",
-//    defaults: new { controller = "Event", action = "Index" });
 
 
 app.Run();
