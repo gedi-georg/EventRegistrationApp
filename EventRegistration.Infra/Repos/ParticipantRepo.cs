@@ -23,10 +23,8 @@ public class ParticipantRepo : IParticipantRepo
 
     public async Task<IEnumerable<Participant>> GetByEventIdAsync(Guid eventId)
     {
-        return await _context.EventParticipants
-            .Where(ep => ep.EventId == eventId) // Filter by EventId
-            .Include(ep => ep.Participant) // Include the Participant navigation property
-            .Select(ep => ep.Participant) // Select only the Participant
+        return await _context.Participants
+            .Where(p => p.EventParticipants.Any(ep => ep.EventId == eventId))
             .ToListAsync();
     }
 

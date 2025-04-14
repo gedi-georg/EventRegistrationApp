@@ -21,6 +21,12 @@ public class EventController : Controller
         return View(events);
     }
 
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View();
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create(EventDto eventDto)
     {
@@ -34,18 +40,34 @@ public class EventController : Controller
 
     public async Task<IActionResult> Details(Guid id)
     {
-        var eventDetails = await _eventService.GetByIdAsync(id);
-        if (eventDetails == null)
-        {
-            return NotFound();
-        }
+        var eventDto = await _eventService.GetByIdAsync(id);
+        if (eventDto == null) return NotFound();
 
         var participants = await _participantService.GetParticipantsByEventId(id);
-        eventDetails.Participants = participants;
 
-        return View(eventDetails);
+        var participantDtos = participants.Select(p => new ParticipantDisplayDto
+        {
+            Id = p.Id,
+            FullName = p.FullName,
+            IdCode = p is PersonDto person
+                ? person.PersonalIdCode
+                : p is CompanyDto company
+                    ? company.RegistrationCode
+                    : ""
+        }).ToList();
+
+        var viewModel = new EventParticipantsViewModel
+        {
+            EventId = eventDto.Id,
+            EventName = eventDto.Name,
+            EventDate = eventDto.Date,
+            EventLocation = eventDto.Location,
+            Participants = participantDtos
+        };
+
+        return View(viewModel);
     }
-    
+
 
 
 

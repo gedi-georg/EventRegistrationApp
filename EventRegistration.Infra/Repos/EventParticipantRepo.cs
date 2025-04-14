@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventRegistration.Infra.Repos;
 
-public class EventParticipantRepository : IEventParticipantRepository
+public class EventParticipantRepo : IEventParticipantRepo
 {
     private readonly ApplicationDbContext _context;
 
-    public EventParticipantRepository(ApplicationDbContext context)
+    public EventParticipantRepo(ApplicationDbContext context)
     {
         _context = context;
     }
@@ -32,6 +32,11 @@ public class EventParticipantRepository : IEventParticipantRepository
     {
         return await _context.EventParticipants
             .FirstOrDefaultAsync(ep => ep.ParticipantId == participantId);
+    }
+
+    public Task DeleteAsync(Guid eventId)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task DeleteAsync(Guid eventId, Guid participantId)

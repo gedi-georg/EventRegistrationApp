@@ -35,10 +35,14 @@
                             {
                                 <tr>
                                     <td>@rowIndex.</td>
-                                    <td>@eventItem.Name</td>
-                                    <td>@eventItem.Date.ToString("dd.MM.yyyy")</td>
                                     <td>
-                                        <a asp-action="Details" asp-route-id="@eventItem.Id" class="btn btn-info btn-sm">Osavõtjad</a>
+                                        <a asp-action="Details" asp-route-id="@eventItem.Id">@eventItem.Name</a>
+                                    </td>
+                                    <td>@eventItem.Date.ToString("dd.MM.yyyy")</td>
+                                    <td>@eventItem.Location</td>
+                                    <td>@(eventItem.Participants?.Count ?? 0)</td>
+                                    <td>
+                                        <a asp-controller="Participant" asp-action="Create" asp-route-eventId="@eventItem.Id" class="btn btn-primary mb-2">Lisa osavõtja</a>
                                         <a asp-action="Delete" asp-route-id="@eventItem.Id" class="btn btn-danger btn-sm">
                                             <img src="~/images/remove.svg" class="img-fluid" style="width: 16px; height: 16px;" alt="Kustuta"/>
                                         </a>
@@ -68,11 +72,12 @@
                             {
                                 <tr>
                                     <td>@rowIndex2.</td>
-                                    <td>@eventItem.Name</td>
-                                    <td>@eventItem.Date.ToString("dd.MM.yyyy")</td>
                                     <td>
-                                        <a asp-action="Details" asp-route-id="@eventItem.Id" class="btn btn-info btn-sm">Osavõtjad</a>
+                                        <a asp-action="Details" asp-route-id="@eventItem.Id">@eventItem.Name</a>
                                     </td>
+                                    <td>@eventItem.Date.ToString("dd.MM.yyyy")</td>
+                                    <td>@eventItem.Location</td>
+                                    <td>@(eventItem.Participants?.Count ?? 0)</td>
                                 </tr>
                                 rowIndex2++;
                             }

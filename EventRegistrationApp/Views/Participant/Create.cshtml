@@ -1,103 +1,102 @@
-﻿@* @model EventRegistration.Application.DTOs.ParticipantDto
-
-@{
-    ViewBag.Title = "Osavõtjate lisamine";
-}
-
-<h3>Osavõtjate lisamine</h3>
-
-<form asp-action="Create" asp-controller="Participant" method="post">
-    <input type="hidden" name="EventId" value="@Model.EventId" />
-
-    <div>
-        <label>
-            <input type="radio" name="IsCompany" value="false" checked onchange="toggleParticipantType()"> Eraisik
-        </label>
-        <label>
-            <input type="radio" name="IsCompany" value="true" onchange="toggleParticipantType()"> Ettevõte
-        </label>
-    </div>
-
-    <div id="personFields">
-        <div>
-            <label for="FirstName">Eesnimi:</label>
-            <input type="text" id="FirstName" name="FirstName" value="@Model.FirstName" />
-        </div>
-        <div>
-            <label for="LastName">Perekonnanimi:</label>
-            <input type="text" id="LastName" name="LastName" value="@Model.LastName" />
-        </div>
-        <div>
-            <label for="PersonalIdCode">Isikukood:</label>
-            <input type="text" id="PersonalIdCode" name="PersonalIdCode" value="@Model.PersonalIdCode" />
-        </div>
-    </div>
-
-    <div id="companyFields" style="display: none;">
-        <div>
-            <label for="LegalName">Ettevõtte nimi:</label>
-            <input type="text" id="LegalName" name="LegalName" value="@Model.LegalName" />
-        </div>
-        <div>
-            <label for="RegistrationCode">Registrikood:</label>
-            <input type="text" id="RegistrationCode" name="RegistrationCode" value="@Model.RegistrationCode" />
-        </div>
-        <div>
-            <label for="ParticipantsCount">Osavõtjate arv:</label>
-            <input type="number" id="ParticipantsCount" name="ParticipantsCount" value="@Model.ParticipantsCount" />
-        </div>
-    </div>
-
-    <div>
-        <label for="PaymentMethod">Makseviis:</label>
-        <select id="PaymentMethod" name="PaymentMethod">
-            <option value="BankTransfer">Pangaülekanne</option>
-            <option value="Cash">Sularaha</option>
-        </select>
-    </div>
-
-    <div>
-        <label for="AdditionalInfo">Lisainfo:</label>
-        <textarea id="AdditionalInfo" name="AdditionalInfo">@Model.AdditionalInfo</textarea>
-    </div>
-
-    <button type="submit">Salvesta</button>
-</form>
-
-<a asp-controller="Event" asp-action="Details">Tagasi</a>
-
-<script>
-    function toggleParticipantType() {
-        var isCompany = document.querySelector('input[name="IsCompany"]:checked').value === "true";
-        document.getElementById("personFields").style.display = isCompany ? "none" : "block";
-        document.getElementById("companyFields").style.display = isCompany ? "block" : "none";
-    }
-
-    // Tagab, et lehe laadimisel on õige väljade olek
-    document.addEventListener("DOMContentLoaded", toggleParticipantType);
-</script>
- *@
- 
- 
-
-@model EventRegistration.Application.DTOs.ParticipantDto
+﻿@model EventRegistration.Application.DTOs.ParticipantCreateViewModel
 
 @{
     ViewData["Title"] = "Add Participant";
 }
 
-<h1>Add Participant</h1>
+<h2>@ViewData["Title"]</h2>
 
-<form asp-action="Create">
-    <input type="hidden" asp-for="EventId" />
+<form asp-action="Create" asp-controller="Participant" method="post">
+    <input type="hidden" asp-for="Participant.EventId" />
 
+    <!-- Dropdown for selecting Person or Company -->
     <div class="form-group">
-        <label asp-for="PaymentMethodId"></label>
-        <select asp-for="PaymentMethodId" class="form-control" asp-items="ViewBag.PaymentMethods"></select>
-        <span asp-validation-for="PaymentMethodId" class="text-danger" />
+        <label class="form-label">Select Participant Type</label>
+        <select id="participantType" name="ParticipantType" class="form-control" onchange="toggleFields()">
+            @foreach (var type in new[] {"Person", "Company"})
+            {
+                <option value="@type" selected="@(Model.ParticipantType == type ? "selected" : null)">@type</option>
+            }
+        </select>
     </div>
 
-    <button type="submit" class="btn btn-success">Add</button>
-    <a asp-controller="Event" asp-action="Details" asp-route-id="@Model.EventId" class="btn btn-secondary">Back</a>
+    <!-- Payment Method Dropdown -->
+    <div class="form-group">
+        <label asp-for="Participant.PaymentMethodId" class="form-label">Payment Method</label>
+        <select asp-for="Participant.PaymentMethodId" class="form-control" asp-items="Model.PaymentMethods"></select>
+        <span asp-validation-for="Participant.PaymentMethodId" class="text-danger"/>
+    </div>
+
+    <!-- Person specific fields -->
+    <div id="personFields" class="participantFields">
+        <div class="form-group">
+            <label asp-for="Person.FirstName" class="form-label">First Name</label>
+            <input asp-for="Person.FirstName" class="form-control"/>
+            <span asp-validation-for="Person.FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Person.LastName" class="form-label">Last Name</label>
+            <input asp-for="Person.LastName" class="form-control"/>
+            <span asp-validation-for="Person.LastName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Person.PersonalIdCode" class="form-label">Personal ID Code</label>
+            <input asp-for="Person.PersonalIdCode" class="form-control"/>
+            <span asp-validation-for="Person.PersonalIdCode" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Company specific fields -->
+    <div id="companyFields" class="participantFields" style="display: none;">
+        <div class="form-group">
+            <label asp-for="Company.LegalName" class="form-label">Legal Name</label>
+            <input asp-for="Company.LegalName" class="form-control"/>
+            <span asp-validation-for="Company.LegalName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Company.RegistrationCode" class="form-label">Registration Code</label>
+            <input asp-for="Company.RegistrationCode" class="form-control"/>
+            <span asp-validation-for="Company.RegistrationCode" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Company.ParticipantsCount" class="form-label">Participants Count</label>
+            <input asp-for="Company.ParticipantsCount" class="form-control"/>
+            <span asp-validation-for="Company.ParticipantsCount" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Additional Info -->
+    <div class="form-group">
+        <label asp-for="Participant.AdditionalInfo" class="form-label">Additional Info</label>
+        <textarea asp-for="Participant.AdditionalInfo" class="form-control"></textarea>
+        <span asp-validation-for="Participant.AdditionalInfo" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
 </form>
 
+@section Scripts {
+    <script>
+        // Function to toggle between Person and Company fields
+        function toggleFields() {
+            var participantType = document.getElementById('participantType').value;
+
+            if (participantType === 'Person') {
+                document.getElementById('personFields').style.display = 'block';
+                document.getElementById('companyFields').style.display = 'none';
+            } else if (participantType === 'Company') {
+                document.getElementById('companyFields').style.display = 'block';
+                document.getElementById('personFields').style.display = 'none';
+            }
+        }
+
+        // Call toggleFields() on page load to display the correct fields
+        window.onload = function() {
+            toggleFields(); // Initialize the correct fields based on the default dropdown value
+        };
+    </script>
+}

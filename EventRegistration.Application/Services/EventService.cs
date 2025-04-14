@@ -10,13 +10,15 @@ public class EventService : IEventService
 {
     private readonly IEventRepo _eventRepo;
     private readonly IParticipantRepo _participantRepo;
+    private readonly IEventParticipantRepo _eventParticipantRepo;
     private readonly IMapper _mapper;
 
-    public EventService(IEventRepo eventRepo, IParticipantRepo participantRepo, IMapper mapper)
+    public EventService(IEventRepo eventRepo, IParticipantRepo participantRepo, IMapper mapper, IEventParticipantRepo eventParticipantRepo)
     {
         _eventRepo = eventRepo;
         _participantRepo = participantRepo;
         _mapper = mapper;
+        _eventParticipantRepo = eventParticipantRepo;
     }
 
     public async Task<IEnumerable<EventDto>> GetAllAsync(bool upcoming = false, bool past = false)
@@ -53,8 +55,16 @@ public class EventService : IEventService
         if (eventEntity == null)
             throw new KeyNotFoundException("Event not found");
 
+        // Kustuta seotud osalejad (EventParticipant kirjed)
+        var participants = await _eventParticipantRepo.GetByEventIdAsync(id);
+        foreach (var participant in participants)
+        {
+            await _eventParticipantRepo.DeleteAsync(participant.EventId);
+        }
+
         await _eventRepo.DeleteAsync(eventEntity);
     }
+
 
     public async Task<IEnumerable<ParticipantDto>> GetParticipantsByEventIdAsync(Guid eventId)
     {

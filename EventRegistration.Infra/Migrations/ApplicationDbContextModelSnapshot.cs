@@ -44,7 +44,7 @@ namespace EventRegistration.Infra.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("EventRegistration.Domain.Models.EventParticipant", b =>
@@ -64,7 +64,7 @@ namespace EventRegistration.Infra.Migrations
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("EventParticipants");
+                    b.ToTable("EventParticipants", (string)null);
                 });
 
             modelBuilder.Entity("EventRegistration.Domain.Models.Participant", b =>
@@ -83,7 +83,7 @@ namespace EventRegistration.Infra.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Participants");
+                    b.ToTable("Participants", (string)null);
 
                     b.HasDiscriminator().HasValue("Participant");
 
@@ -102,7 +102,7 @@ namespace EventRegistration.Infra.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentMethods");
+                    b.ToTable("PaymentMethods", (string)null);
 
                     b.HasData(
                         new

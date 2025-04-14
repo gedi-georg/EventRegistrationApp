@@ -2,10 +2,10 @@
 
 namespace EventRegistration.Infra.Interfaces;
 
-public interface IEventParticipantRepository
+public interface IEventParticipantRepo
 {
     Task AddAsync(EventParticipant eventParticipant);
     Task<List<EventParticipant>> GetByEventIdAsync(Guid eventId);
     Task<EventParticipant?> GetByParticipantIdAsync(Guid participantId);
-    Task DeleteAsync(Guid eventId, Guid participantId);
+    Task DeleteAsync(Guid eventId);
 }

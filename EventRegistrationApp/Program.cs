@@ -17,10 +17,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IEventRepo, EventRepo>();
 builder.Services.AddScoped<IParticipantRepo, ParticipantRepo>();
 builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
-builder.Services.AddScoped<IEventParticipantRepository, EventParticipantRepository>();
+builder.Services.AddScoped<IEventParticipantRepo, EventParticipantRepo>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IParticipantService, ParticipantService>();
 builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
+builder.Services.AddScoped<IEventParticipantService, EventParticipantService>();
 
 
 // Register AutoMapper and add the MappingProfile

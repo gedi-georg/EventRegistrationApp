@@ -1,17 +1,12 @@
 ﻿using EventRegistration.Application.DTOs;
-using EventRegistration.Application.Helpers;
-using EventRegistration.Domain.Models;
-using EventRegistration.Infra.Interfaces;
-using EventRegistration.Infra.Repos;
 
-namespace EventRegistration.Application.Interfaces
+namespace EventRegistration.Application.Interfaces;
+
+public interface IParticipantService
 {
-    public interface IParticipantService
-    {
-        Task<ParticipantDto> GetParticipantById(Guid id);
-        Task<List<ParticipantDto>> GetParticipantsByEventId(Guid id);
-        Task AddParticipantAsync(ParticipantDto participantDto);
-        Task UpdateParticipant(ParticipantDto participantDto);
-        Task DeleteParticipant(Guid id);
-    }
+    Task<ParticipantDto> GetParticipantById(Guid id);
+    Task<List<ParticipantDto>> GetParticipantsByEventId(Guid eventId);
+    Task AddParticipantAsync(ParticipantDto participantDto);
+    Task UpdateParticipant(ParticipantDto participantDto);
+    Task DeleteParticipant(Guid id);
 }

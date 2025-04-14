@@ -9,6 +9,7 @@ public class ParticipantDto
     public virtual string FullName { get; }
     public Guid EventId { get; set; }
     public Guid PaymentMethodId { get; set; }
+    public virtual string IdCode { get; set; }
 }
 
 public class PersonDto : ParticipantDto
@@ -18,6 +19,7 @@ public class PersonDto : ParticipantDto
     public string PersonalIdCode { get; set; }
 
     public override string FullName => $"{FirstName} {LastName}";
+    public override string IdCode => PersonalIdCode;
 }
 
 
@@ -28,4 +30,5 @@ public class CompanyDto : ParticipantDto
     public int? ParticipantsCount { get; set; }
 
     public override string FullName => LegalName;
+    public override string IdCode => RegistrationCode;
 }

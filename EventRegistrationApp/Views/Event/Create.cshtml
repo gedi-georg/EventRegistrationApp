@@ -7,7 +7,7 @@
 <div class="container mt-4">
     <h2 class="mb-4">Lisa Üritus</h2>
 
-    <form asp-action="Create" method="post">
+    <form id="createEventForm" asp-action="Create" method="post">
         <div class="mb-3">
             <label for="Name" class="form-label">Ürituse nimi:</label>
             <input type="text" class="form-control" id="Name" name="Name" required />
@@ -28,3 +28,15 @@
         <button type="submit" class="btn btn-success">Salvesta</button>
     </form>
 </div>
+
+<script>
+    document.getElementById("createEventForm").onsubmit = function(event) {
+        var eventDate = new Date(document.getElementById("Date").value);
+        var currentDate = new Date();
+
+        if (eventDate < currentDate) {
+            event.preventDefault();
+            alert("Üritus ei saa olla minevikus. Palun valige kehtiv kuupäev.");
+        }
+    };
+</script>
